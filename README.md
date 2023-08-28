@@ -1,6 +1,6 @@
 # Nebula Podcast Feeds
 
-Create video podcast feeds from Nebula content
+Create podcast feeds from Nebula channels
 
 ## Features
 
