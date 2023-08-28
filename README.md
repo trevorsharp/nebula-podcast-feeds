@@ -30,6 +30,8 @@ services:
     image: trevorsharp/nebula-podcast-feeds:latest
     container_name: nebula-podcast-feeds
     restart: unless-stopped
+    ports:
+      - 80:3000
     environment:
       - 'NEBULA_EMAIL=email@example.com'
       - 'NEBULA_PASSWORD=XXXXXXXXXXXXXX'
