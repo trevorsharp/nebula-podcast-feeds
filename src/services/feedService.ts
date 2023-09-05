@@ -12,6 +12,7 @@ const buildFeed = (hostname: string, channel: Channel, episodes: Episode[]) => {
 
   episodes.forEach((episode) =>
     feed.addItem({
+      guid: episode.id,
       title: episode.title,
       description: `${episode.description}\n\n${episode.nebulaUrl}`,
       url: episode.nebulaUrl,
