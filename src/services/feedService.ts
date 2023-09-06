@@ -8,6 +8,7 @@ const buildFeed = (hostname: string, channel: Channel, episodes: Episode[]) => {
     description: channel.description,
     imageUrl: channel.coverUrl,
     author: channel.title,
+    siteUrl: channel.nebulaUrl,
   });
 
   episodes.forEach((episode) =>

@@ -12,6 +12,7 @@ const channelSchema = z
             src: z.string(),
           }),
         }),
+        share_url: z.string(),
       })
     ),
   })
@@ -25,6 +26,7 @@ const channelSchema = z
       title: channel.title,
       description: channel.description,
       coverUrl: channel.images.avatar.src,
+      nebulaUrl: channel.share_url,
     };
   });
 
