@@ -1,14 +1,16 @@
-FROM node:lts
+FROM oven/bun
 
 WORKDIR /app
 
 COPY package.json ./package.json
-COPY yarn.lock  ./yarn.lock
+COPY bun.lockb  ./bun.lockb
 
-RUN yarn install
+RUN bun install
 
 COPY . .
 
-RUN yarn build
+EXPOSE 3000
 
-CMD yarn start
+ENV NODE_ENV="production"
+
+CMD bun start
