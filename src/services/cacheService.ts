@@ -10,7 +10,7 @@ const withCache =
   <TFunc extends (...args: any[]) => Promise<any>>(cachePrefix: string, ttl: number, func: TFunc) =>
   async (...args: Parameters<TFunc>): Promise<Awaited<ReturnType<TFunc>>> => {
     const cacheKey = `${cachePrefix}${args.join('-')}`;
-    const cacheResult = await get<Awaited<ReturnType<TFunc>>>(cacheKey);
+    const cacheResult = get<Awaited<ReturnType<TFunc>>>(cacheKey);
 
     if (cacheResult) return cacheResult;
 
