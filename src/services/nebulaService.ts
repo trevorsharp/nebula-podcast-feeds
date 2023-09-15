@@ -1,14 +1,9 @@
 import { z } from 'zod';
-import { Channel, channelSchema } from '../types/channel';
-import { Episode, episodesSchema } from '../types/episode';
-import { get as getCache, set as setCache } from './cacheService';
+import { channelSchema } from '../types/channel';
+import { episodesSchema } from '../types/episode';
+import { withCache } from './cacheService';
 
-const getAuthToken = async () => {
-  const cacheKey = 'nebula-auth-token';
-  const cacheResult = getCache<string>(cacheKey);
-
-  if (cacheResult) return cacheResult;
-
+const getAuthToken = withCache('nebula-auth-token', 23 * 60 * 60, async () => {
   const loginResponse = await fetch('https://nebula.tv/auth/login/', {
     method: 'POST',
     body: JSON.stringify({
@@ -41,21 +36,10 @@ const getAuthToken = async () => {
     throw `Failed to get auth token for Nebula - ${authResponse.statusText}`;
   }
 
-  const authToken = await authResponse
-    .json()
-    .then((responseBody) => z.object({ token: z.string() }).parse(responseBody).token);
+  return await authResponse.json().then((responseBody) => z.object({ token: z.string() }).parse(responseBody).token);
+});
 
-  setCache<string>(cacheKey, authToken, 23 * 60 * 60);
-
-  return authToken;
-};
-
-const searchForChannel = async (searchText: string) => {
-  const cacheKey = `channel-search-${searchText}`;
-  const cacheResult = getCache<Channel>(cacheKey);
-
-  if (cacheResult) return cacheResult;
-
+const searchForChannel = withCache('nebula-channel-search-', 7 * 24 * 60 * 60, async (searchText: string) => {
   const response = await fetch(
     `https://content.api.nebula.app/video_channels/search/?q=${encodeURIComponent(searchText)}`
   );
@@ -64,19 +48,10 @@ const searchForChannel = async (searchText: string) => {
     throw `Failed to search for channel - ${response.statusText}`;
   }
 
-  const channel = await response.json().then((responseBody) => channelSchema.parse(responseBody));
+  return await response.json().then((responseBody) => channelSchema.parse(responseBody));
+});
 
-  if (channel) setCache<Channel>(cacheKey, channel, 7 * 24 * 60 * 60);
-
-  return channel;
-};
-
-const getEpisodes = async (channelId: string) => {
-  const cacheKey = `episodes-${channelId}`;
-  const cacheResult = getCache<Episode[]>(cacheKey);
-
-  if (cacheResult) return cacheResult;
-
+const getEpisodes = withCache('nebula-episodes-', 15 * 60, async (channelId: string) => {
   const response = await fetch(
     `https://content.api.nebula.app/video_channels/${channelId}/video_episodes/?ordering=-published_at`
   );
@@ -85,12 +60,8 @@ const getEpisodes = async (channelId: string) => {
     throw `Failed to fetch episodes - ${response.statusText}`;
   }
 
-  const episodes = await response.json().then((responseBody) => episodesSchema.parse(responseBody));
-
-  setCache<Episode[]>(cacheKey, episodes, 15 * 60);
-
-  return episodes;
-};
+  return await response.json().then((responseBody) => episodesSchema.parse(responseBody));
+});
 
 const getVideoUrl = async (videoId: string) => {
   const authToken = await getAuthToken();
