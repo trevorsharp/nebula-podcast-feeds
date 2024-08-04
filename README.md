@@ -24,7 +24,6 @@ To run this application using Docker:
 ### docker-compose.yml
 
 ```
-version: '3'
 services:
   nebula-podcast-feeds:
     image: trevorsharp/nebula-podcast-feeds:latest
