@@ -32,9 +32,9 @@ services:
     ports:
       - 80:3000
     environment:
-      - 'NEBULA_EMAIL=email@example.com'
-      - 'NEBULA_PASSWORD=XXXXXXXXXXXXXX'
+      - 'NEBULA_AUTH_TOKEN=XXXXXXXXXXXXXX'
 ```
 
 1. Create a file named `docker-compose.yml` with the contents above
-2. Add your Nebula account email and password to the environment variables
+2. Find your Nebula auth token by logging into your Nebula account and finding the cookie value for `nebula_auth.apiToken`
+3. Add your Nebula auth token to the `NEBULA_AUTH_TOKEN` environment variable
