@@ -4,26 +4,6 @@ import { episodesSchema } from '../types/episode';
 import { withCache } from './cacheService';
 
 const getAuthToken = withCache('nebula-auth-token', 23 * 60 * 60, async () => {
-  // const loginResponse = await fetch('https://nebula.tv/auth/login/', {
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     email: process.env.NEBULA_EMAIL,
-  //     password: process.env.NEBULA_PASSWORD,
-  //   }),
-  //   headers: {
-  //     'content-type': 'application/json',
-  //     accept: 'application/json',
-  //   },
-  // });
-
-  // if (loginResponse.status !== 200) {
-  //   throw `Failed to login to Nebula - ${loginResponse.statusText}`;
-  // }
-
-  // const authToken = await loginResponse
-  //   .json()
-  //   .then((responseBody) => z.object({ key: z.string() }).parse(responseBody).key);
-
   const authToken = process.env.NEBULA_AUTH_TOKEN;
 
   const authResponse = await fetch('https://users.api.nebula.app/api/v1/authorization/', {
