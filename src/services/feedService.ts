@@ -1,32 +1,40 @@
 import { Podcast } from 'podcast';
-import { Channel } from '../types/channel';
-import { Episode } from '../types/episode';
+import nebulaService from './nebulaService';
 
-const buildFeed = (hostname: string, channel: Channel, episodes: Episode[]) => {
-  const feed = new Podcast({
-    title: channel.title,
-    description: channel.description,
-    imageUrl: channel.coverUrl,
-    author: channel.title,
-    siteUrl: channel.nebulaUrl,
+const getFeedData = async (feedId: string) => await nebulaService.getChannel(feedId);
+
+const generatePodcastFeed = async (host: string, feedId: string) => {
+  const feedData = await getFeedData(feedId);
+
+  if (!feedData) {
+    return undefined;
+  }
+
+  const rssFeed = new Podcast({
+    title: feedData.name,
+    description: feedData.description,
+    author: feedData.name,
+    feedUrl: `http://${host}/${feedId}`,
+    siteUrl: feedData.link,
+    imageUrl: feedData.imageUrl,
   });
 
-  episodes.forEach((episode) =>
-    feed.addItem({
-      guid: episode.id,
-      title: episode.title,
-      description: `${episode.description}\n\n${episode.nebulaUrl}`,
-      url: episode.nebulaUrl,
-      date: episode.publishedOn,
+  feedData.videos.forEach((video) =>
+    rssFeed.addItem({
+      title: video.title,
+      itunesTitle: video.title,
+      description: `${video.description}\n\n${video.link}`,
+      date: new Date(video.date),
       enclosure: {
-        url: `http://${hostname}/videos/${episode.id}`,
+        url: `http://${host}/videos/${video.id}`,
         type: 'video/mp4',
       },
-      itunesDuration: episode.duration,
-    })
+      url: video.link,
+      itunesDuration: video.duration,
+    }),
   );
 
-  return feed.buildXml();
+  return rssFeed.buildXml();
 };
 
-export { buildFeed };
+export default { getFeedData, generatePodcastFeed };
