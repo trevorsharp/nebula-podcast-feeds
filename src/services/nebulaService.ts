@@ -77,13 +77,17 @@ const searchChannel = withCache(
         console.error(error);
         return undefined;
       });
+      
+    if (!channel) {
+      return undefined;
+    }
 
     const { data, error } = channelValidator.safeParse({
-      id: channel?.id,
-      name: channel?.title,
-      description: channel?.description,
-      imageUrl: channel?.images.avatar.src,
-      link: channel?.share_url,
+      id: channel.id,
+      name: channel.title,
+      description: channel.description,
+      imageUrl: channel.images.avatar.src,
+      link: channel.share_url,
     });
 
     if (error) {
