@@ -65,22 +65,31 @@ const searchChannel = withCache(
         .min(1),
     });
 
-    const channel = await fetch(
+    const channels = await fetch(
       `https://content.api.nebula.app/video_channels/search/?q=${encodeURIComponent(searchText)}`,
     )
       .then((response) => {
         if (!response.ok) throw new Error(`Received response with status ${response.status}`);
         return response.json();
       })
-      .then((data) => channelResponseValidator.parse(data).results[0])
+      .then((data) => channelResponseValidator.parse(data).results)
       .catch((error) => {
         console.error(error);
         return undefined;
       });
-      
-    if (!channel) {
+
+    if (!channels) {
       return undefined;
     }
+
+    const normalizedSearchText = searchText.toLowerCase();
+    const channel =
+      channels.find(
+        ({ share_url }) =>
+          share_url.split('/').filter(Boolean).at(-1)?.toLowerCase() === normalizedSearchText,
+      ) ??
+      channels.find(({ title }) => title.toLowerCase() === normalizedSearchText) ??
+      channels[0];
 
     const { data, error } = channelValidator.safeParse({
       id: channel.id,
