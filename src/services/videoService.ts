@@ -3,7 +3,7 @@ import { rename, rm } from 'node:fs/promises';
 import env from '../env';
 import nebulaService from './nebulaService';
 
-const isValidVideoId = (videoId: string) => /^[a-zA-Z0-9:-]+$/.test(videoId);
+const isValidVideoId = (videoId: string) => /^[a-zA-Z0-9_:-]+$/.test(videoId);
 const getVideoFileName = (videoId: string) => `${videoId}.mp4`;
 const getVideoFilePath = (videoId: string) =>
   `${env.CONTENT_FOLDER_PATH}/${getVideoFileName(videoId)}`;
