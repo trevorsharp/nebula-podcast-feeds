@@ -6,6 +6,7 @@ Create podcast feeds from Nebula channels
 
 - Provide podcast feeds for Nebula users that you support
 - Stream new videos from Nebula in the podcast app of your choice
+- Optionally download videos as MP4 files for improved podcast app compatibility
 
 ## Self-Hosted Setup Using Docker
 
@@ -38,3 +39,26 @@ services:
 1. Create a file named `docker-compose.yml` with the contents above
 2. Find your Nebula auth token by logging into your Nebula account and finding the cookie value for `nebula_auth.apiToken`
 3. Add your Nebula auth token to the `NEBULA_AUTH_TOKEN` environment variable
+
+### Download Videos (Optional)
+
+By default, video enclosures redirect to Nebula's HLS stream. To require locally downloaded MP4 files instead, enable downloads and mount persistent storage:
+
+```yml
+services:
+  nebula-podcast-feeds:
+    image: trevorsharp/nebula-podcast-feeds:latest
+    container_name: nebula-podcast-feeds
+    restart: unless-stopped
+    ports:
+      - 80:3000
+    environment:
+      - 'NEBULA_AUTH_TOKEN=XXXXXXXXXXXXXX'
+      - 'DOWNLOAD_VIDEOS=true'
+    volumes:
+      - ./content:/app/content
+```
+
+The newest video is queued when its feed is requested. Other videos are queued when a podcast app requests them and return `503 Service Unavailable` until their downloads finish. Download mode does not fall back to HLS.
+
+Downloaded videos are not automatically removed and can consume significant disk space. Everything in the mounted `content` folder is publicly accessible through the web server, so it should contain only downloaded video files.

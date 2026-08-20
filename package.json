@@ -9,7 +9,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "hono": "4.12.25",
+    "hono": "4.13.3",
     "node-cache": "5.1.2",
     "podcast": "2.0.1",
     "zod": "4.1.12"
