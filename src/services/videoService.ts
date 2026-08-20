@@ -36,7 +36,7 @@ const downloadVideo = async (videoId: string) => {
   const videoFilePath = getVideoFilePath(videoId);
   const stagedVideoFilePath = `${env.CONTENT_FOLDER_PATH}/${videoId}.part.mp4`;
   const ffmpegOptions = {
-    raw: '-y -hide_banner -loglevel error -map 0:v:0 -map 0:a:0 -c copy -movflags +faststart',
+    raw: '-y -hide_banner -loglevel error -c copy -movflags +faststart',
   };
 
   console.log(`Starting video download (${videoId})`);
