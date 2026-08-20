@@ -4,7 +4,7 @@ import startupService from './services/startupService';
 await startupService.startApplication();
 
 Bun.serve({
-  port: 3000,
+  port: 3001,
   fetch: router.fetch,
 });
 
