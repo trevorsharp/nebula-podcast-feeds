@@ -9,6 +9,5 @@ COPY ./src ./src
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Run application
 EXPOSE 3000/tcp
 CMD ["sh", "-c", "nginx && bun run start"]
