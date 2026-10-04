@@ -5,7 +5,8 @@ RUN apk add --no-cache ffmpeg nginx
 
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --production
-COPY ./src ./index.ts ./
+COPY index.ts ./
+COPY ./src ./src
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
