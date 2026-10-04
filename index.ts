@@ -14,7 +14,9 @@ import * as nebulaService from './src/nebula-service';
 const downloadsEnabled = process.env.DOWNLOAD_VIDEOS === 'true';
 
 const contentManager = await createContentManager({
-  configuration: { getContentFileName: (contentId: string) => `${contentId}.mp4` },
+  configuration: {
+    getContentFileName: (contentId: string) => `${contentId}.mp4`,
+  },
 });
 
 if (downloadsEnabled) {
@@ -25,10 +27,11 @@ if (downloadsEnabled) {
   });
 }
 
-const streamingProvider = createStreamingProvider({
-  configuration: {},
-  fetchStreamingUrl: nebulaService.getStreamingUrl,
-});
+const streamingProvider = downloadsEnabled
+  ? undefined
+  : createStreamingProvider({
+      fetchStreamingUrl: nebulaService.getStreamingUrl,
+    });
 
 const feedDataProvider = createFeedDataProvider({
   configuration: {
@@ -63,13 +66,21 @@ const feedDataProvider = createFeedDataProvider({
     ),
 });
 
+const contentServer = createContentServer({
+  configuration: {
+    getContentServerUrl: ({ fileName }) => `/content/${fileName}`,
+  },
+  contentManager,
+  streamingProvider,
+});
+
 const webServer = createWebServer({
   configuration: {
     feedApiRoute: '/:feedId',
     contentApiRoute: '/videos/:contentId',
   },
   feedGenerator: createFeedGenerator({ feedDataProvider }),
-  contentServer: createContentServer({ contentManager, streamingProvider }),
+  contentServer,
 });
 
 Bun.serve({
