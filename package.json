@@ -1,21 +1,27 @@
 {
   "name": "nebula-podcast-feeds",
-  "version": "1.0.0",
-  "license": "MIT",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "start": "bun run src/index.ts",
-    "lint": "tsc --noEmit && prettier --check .",
+    "dev": "bun run --hot index.ts",
+    "start": "bun run index.ts",
+    "lint": "tsc --noEmit && prettier --check . && eslint .",
     "prettier": "prettier --write ."
   },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
   "dependencies": {
-    "hono": "4.13.3",
-    "node-cache": "5.1.2",
-    "podcast": "2.0.1",
-    "zod": "4.1.12"
+    "podcast-feeds": "git+https://github.com/trevorsharp/podcast-feeds.git#ace80990cf2f3aa79e09136ee679c4e381cf44a3",
+    "zod": "4.6.5"
   },
   "devDependencies": {
-    "prettier": "3.6.2",
-    "typescript": "5.9.3"
+    "@eslint/js": "10.0.1",
+    "@types/bun": "latest",
+    "eslint": "10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-simple-import-sort": "14.0.0",
+    "globals": "17.13.0",
+    "jiti": "2.7.0",
+    "prettier": "3.9.9",
+    "typescript-eslint": "8.71.0"
   }
 }
