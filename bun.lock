@@ -5,7 +5,7 @@
     "": {
       "name": "nebula-podcast-feeds",
       "dependencies": {
-        "podcast-feeds": "git+https://github.com/trevorsharp/podcast-feeds.git#18881e",
+        "podcast-feeds": "git+https://github.com/trevorsharp/podcast-feeds.git#7b809ef49615903be959512de6c3c5a3b6a887cb",
         "zod": "4.6.5",
       },
       "devDependencies": {
@@ -207,7 +207,7 @@
 
     "podcast": ["podcast@2.0.1", "", { "dependencies": { "rss": "^1.2.2" } }, "sha512-TWXe/zVziwJNksAn7RLkSre+Z6VQgbs/+gC7qQCKdkyw0hv2hdFGOY9rHgKqa4LI+UP+yZBa6Wr+b9a9vrYDYQ=="],
 
-    "podcast-feeds": ["podcast-feeds@github:trevorsharp/podcast-feeds#18881ea", { "dependencies": { "hono": "4.13.12", "node-cache": "5.1.2", "podcast": "^2.0.1", "zod": "4.6.5" }, "peerDependencies": { "typescript": "^5" } }, "trevorsharp-podcast-feeds-18881ea", "sha512-HXbAwYkKA6V1+DqY3MJAxmrAiUn3bJUZu1Ny7QpBQgn82JYh787Wa72RBbZP7N6Z4BTN0T6LVxyPw95HlhDvRA=="],
+    "podcast-feeds": ["podcast-feeds@github:trevorsharp/podcast-feeds#7b809ef", { "dependencies": { "hono": "4.13.12", "node-cache": "5.1.2", "podcast": "^2.0.1", "zod": "4.6.5" }, "peerDependencies": { "typescript": "^5" } }, "trevorsharp-podcast-feeds-7b809ef", "sha512-kRhK8hvXqi6oSURKjyLCPSNR5dmsi48Y8F9Y1WQSCMs9gYq2uBdrhXaJnZ2adaEFIPPNMpAG6mCxfS3yPF5N5A=="],
 
     "prelude-ls": ["prelude-ls@1.2.1", "", {}, "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="],
 

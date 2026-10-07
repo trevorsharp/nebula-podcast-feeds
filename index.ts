@@ -13,25 +13,17 @@ import * as nebulaService from './src/nebula-service';
 
 const downloadsEnabled = process.env.DOWNLOAD_VIDEOS === 'true';
 
-const contentManager = await createContentManager({
-  configuration: {
-    getContentFileName: (contentId: string) => `${contentId}.mp4`,
-  },
-});
+const contentManager = downloadsEnabled
+  ? await createContentManager({ configuration: { getContentFileName: (contentId: string) => `${contentId}.mp4` } })
+  : undefined;
 
-if (downloadsEnabled) {
+if (contentManager) {
   createDownloadManager({
     configuration: { downloadLatestNumberOfItems: 2 },
     contentManager,
     downloadContent: downloadService.downloadVideo,
   });
 }
-
-const streamingProvider = downloadsEnabled
-  ? undefined
-  : createStreamingProvider({
-      fetchStreamingUrl: nebulaService.getStreamingUrl,
-    });
 
 const feedDataProvider = createFeedDataProvider({
   configuration: {
@@ -45,7 +37,7 @@ const feedDataProvider = createFeedDataProvider({
             feedId: channel.id,
             title: channel.title,
             description: channel.description,
-            feedUrl: `${options.baseUrl}/${encodeURIComponent(channel.id)}`,
+            feedUrl: `${options.baseUrl}/${encodeURIComponent(feedId)}`,
             sourceUrl: channel.share_url,
             imageUrl: channel.images.avatar.src,
           }
@@ -66,12 +58,15 @@ const feedDataProvider = createFeedDataProvider({
     ),
 });
 
+const contentProvider = contentManager
+  ? { contentManager }
+  : { streamingProvider: createStreamingProvider({ fetchStreamingUrl: nebulaService.getStreamingUrl }) };
+
 const contentServer = createContentServer({
   configuration: {
     getContentServerUrl: ({ fileName }) => `/content/${fileName}`,
   },
-  contentManager,
-  streamingProvider,
+  ...contentProvider,
 });
 
 const webServer = createWebServer({

@@ -1,4 +1,4 @@
-import { rename, rm } from 'node:fs/promises';
+import { rename } from 'node:fs/promises';
 
 import { $ } from 'bun';
 import type { ContentManager } from 'podcast-feeds';
@@ -6,14 +6,18 @@ import type { ContentManager } from 'podcast-feeds';
 import * as nebulaService from './nebula-service';
 
 export const downloadVideo = async (contentId: string, contentManager: ContentManager) => {
-  const sourceUrl = nebulaService.getStreamingUrl(contentId);
-
   const filePath = contentManager.getContentFilePath(contentId);
+  if (!filePath) return;
+
+  const sourceUrl = await nebulaService.getStreamingUrl(contentId);
+  if (!sourceUrl) return;
+
   const temporaryFilePath = filePath.replace(/(\.[^.]+)$/, '.temp$1');
 
   console.log(`Starting video download (${contentId})`);
 
-  await rm(`${temporaryFilePath}*`, { force: true });
+  const removeTemporaryFiles = () => $`rm -f ${temporaryFilePath}*`.nothrow().quiet();
+  await removeTemporaryFiles();
 
   await $`ffmpeg \
       -i ${sourceUrl} \
@@ -27,5 +31,5 @@ export const downloadVideo = async (contentId: string, contentManager: ContentMa
     .then(() => rename(temporaryFilePath, filePath))
     .then(() => console.log(`Finished video download (${contentId})`))
     .catch((error) => console.error(`Failed to download video (${contentId}) - ${error.info?.stderr ?? error}`))
-    .finally(() => rm(`${temporaryFilePath}*`, { force: true }).catch(() => {}));
+    .finally(removeTemporaryFiles);
 };

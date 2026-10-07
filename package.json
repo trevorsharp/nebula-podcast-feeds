@@ -10,7 +10,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "podcast-feeds": "git+https://github.com/trevorsharp/podcast-feeds.git#18881e",
+    "podcast-feeds": "git+https://github.com/trevorsharp/podcast-feeds.git#7b809ef49615903be959512de6c3c5a3b6a887cb",
     "zod": "4.6.5"
   },
   "devDependencies": {

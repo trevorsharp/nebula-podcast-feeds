@@ -84,5 +84,7 @@ export const fetchVideosForChannel = async (channelId: string) => {
 
 export const getStreamingUrl = async (contentId: string) => {
   const authToken = await getAuthToken();
+  if (!authToken) return undefined;
+
   return `https://content.api.nebula.app/video_episodes/${contentId}/manifest.m3u8?token=${authToken}`;
 };
