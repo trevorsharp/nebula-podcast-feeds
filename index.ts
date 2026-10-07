@@ -2,6 +2,7 @@ import {
   createContentManager,
   createContentServer,
   createDownloadManager,
+  createEventBus,
   createFeedDataProvider,
   createFeedGenerator,
   createStreamingProvider,
@@ -10,6 +11,8 @@ import {
 
 import * as downloadService from './src/download-service';
 import * as nebulaService from './src/nebula-service';
+
+const eventBus = createEventBus();
 
 const downloadsEnabled = process.env.DOWNLOAD_VIDEOS === 'true';
 
@@ -20,6 +23,7 @@ const contentManager = downloadsEnabled
 if (contentManager) {
   createDownloadManager({
     configuration: { downloadLatestNumberOfItems: 2 },
+    eventBus,
     contentManager,
     downloadContent: downloadService.downloadVideo,
   });
@@ -30,6 +34,7 @@ const feedDataProvider = createFeedDataProvider({
     cacheFeedDataTimeToLive: 7 * 24 * 60 * 60,
     cacheFeedContentTimeToLive: 15 * 60,
   },
+  eventBus,
   fetchFeedData: (feedId, options) =>
     nebulaService.searchForChannel(feedId).then((channel) =>
       channel
@@ -66,6 +71,7 @@ const contentServer = createContentServer({
   configuration: {
     getContentServerUrl: ({ fileName }) => `/content/${fileName}`,
   },
+  eventBus,
   ...contentProvider,
 });
 
