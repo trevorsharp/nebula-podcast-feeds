@@ -16,7 +16,7 @@ export const downloadVideo = async (contentId: string, contentManager: ContentMa
 
   console.log(`Starting video download (${contentId})`);
 
-  const removeTemporaryFiles = () => $`sh -c 'rm -f "$1"*' -- ${temporaryFilePath}`.nothrow().quiet();
+  const removeTemporaryFiles = () => $`rm -f ${temporaryFilePath}*`.nothrow().quiet();
   await removeTemporaryFiles();
 
   await $`ffmpeg \
