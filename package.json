@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "podcast-feeds": "git+https://github.com/trevorsharp/podcast-feeds.git#ace80990cf2f3aa79e09136ee679c4e381cf44a3",
-    "zod": "4.6.5"
+    "zod": "4.6.6"
+  },
+  "overrides": {
+    "zod": "4.6.6"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
